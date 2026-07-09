@@ -102,7 +102,7 @@ are listed above simply so you know what each part of the system does.
 > **Note:** Values are transmitted as 16-bit MODBUS registers scaled ×100, so
 > all `AI`/`MI`/`MO` values are limited to roughly **±327.67** with 2 decimal
 > places of precision. Keep "scratch-pad" variables within this range to avoid
-> integer wraparound.
+> integer overflow/underflow.
 
 ## Getting Started
 
