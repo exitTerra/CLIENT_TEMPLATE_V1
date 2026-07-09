@@ -150,6 +150,7 @@ are listed above simply so you know what each part of the system does.
 
 ## Unique MATLAB Template Errors
 | Error | Cause | Fix |
+|---|---|---|
 | **C01**   — Panel locked by another user | Someone else (or a previous crashed session of yours) still holds the panel gate | Confirm you used the right ES number, wait for the timeout, or ask your supervisor to reset the panel from the server |
 | **C02**   — MODBUS server not found | You are not on the lab network | Check your Wi-Fi connection |
 | **C03**   — Kicked from panel | LabVIEW was stopped/crashed, or the session timed out | Reconnect LabVIEW first, then re-run the MATLAB script |
