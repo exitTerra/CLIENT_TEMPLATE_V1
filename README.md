@@ -68,8 +68,8 @@ are listed above simply so you know what each part of the system does.
 ```
    ┌────────────────┐         ┌────────────────────────────────────┐
    │  Physical Rig  │  <----> │  MODBUS/TCP Server @ 192.168.1.200 │
-   │ sensors/actuat.│         └───────────────────┬────────────────┘
-   └────────────────┘                             │
+   │ sensors/actuat.│         │               PORT 8080            │
+   └────────────────┘         └───────────────────┬────────────────┘
                                                   │
                           ┌───────────────────────▼───────────────────────┐
                           │  LabVIEW: Client_Template_MOD.vi   (REQUIRED) │
