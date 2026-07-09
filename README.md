@@ -123,7 +123,7 @@ are listed above simply so you know what each part of the system does.
 
 ### 2. MATLAB advanced control (optional)
 
-**Requirements:** MATLAB with Instrument Control Toolbox (needed for the
+**Requirements:** MATLAB with Industrial Control Toolbox (needed for the
 `modbus()` object), LabVIEW already connected and running on the **same PC**
 (complete step 1 first).
 
