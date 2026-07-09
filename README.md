@@ -149,15 +149,11 @@ are listed above simply so you know what each part of the system does.
 > confirm your connection works before writing your own control code.
 
 ## Unique MATLAB Template Errors
-
-| **C01**   — Panel locked by another user | Someone else (or a previous crashed session of yours) still holds the panel gate 
-        **Potential Fix** Confirm you used the right ES number, wait for the timeout, or ask your supervisor to reset the panel from the server
-| **C02**   — MODBUS server not found
-        **Fix** You are not on the lab network | Check your Wi-Fi connection |
-| **C03**   — Kicked from panel | LabVIEW was stopped/crashed, or the session timed out 
-        **Fix** Reconnect LabVIEW first, then re-run the MATLAB script
-| `Undefined function 'commsInit'` (or similar) - `supportingFunctions` is not on the MATLAB path
-        **Fix** See [MATLAB step 3](#2-matlab-advanced-control-optional) |
+| Error | Cause | Fix |
+| **C01**   — Panel locked by another user | Someone else (or a previous crashed session of yours) still holds the panel gate | Confirm you used the right ES number, wait for the timeout, or ask your supervisor to reset the panel from the server |
+| **C02**   — MODBUS server not found | You are not on the lab network | Check your Wi-Fi connection |
+| **C03**   — Kicked from panel | LabVIEW was stopped/crashed, or the session timed out | Reconnect LabVIEW first, then re-run the MATLAB script |
+| `Undefined function 'commsInit'` (or similar) - `supportingFunctions` is not on the MATLAB path |See [MATLAB step 3](#2-matlab-advanced-control-optional) |
 
 ## Appendix: MODBUS Register Map (advanced reference)
 
