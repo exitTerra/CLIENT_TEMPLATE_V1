@@ -76,9 +76,9 @@ are listed above simply so you know what each part of the system does.
                           └───────────────────────┬───────────────────────┘
                                                   │  same PC, optional,
                                                   │  running at the same time
-                          ┌───────────────────────▼────────────────────────┐
-                          │  MATLAB: ML_client_template.m      (OPTIONAL)  │
-                          └────────────────────────────────────────────────┘
+                          ┌───────────────────────▼───────────────────────┐
+                          │  MATLAB: ML_client_template.m     (OPTIONAL)  │
+                          └───────────────────────────────────────────────┘
 ```
 
 - The lab server holds a block of registers for each rig/panel (an **ES**
