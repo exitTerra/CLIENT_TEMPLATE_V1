@@ -177,9 +177,12 @@ started.
 For complete step-by-step instructions, screenshots, and rig-specific detail,
 see the [`Documentation/`](./Documentation) folder:
 
-- [`ICE_Lab_User_Manual_REV2_2.pdf`](./Documentation/ICE_Lab_User_Manual_REV2_2.pdf) — Rig / lab overview & safety
 - [`ICE-1001 ICE Lab LabVIEW Programming.pdf`](./Documentation/ICE-1001%20ICE%20Lab%20LabVIEW%20Programming.pdf) — Full LabVIEW guide
 - [`ICE-1002 ICE Lab MATLAB Programming.pdf`](./Documentation/ICE-1002%20ICE%20Lab%20MATLAB%20Programming.pdf) — Full MATLAB guide
+
+NOTE: an additional file is available for server side comunication with panels/ESs, this is vendor maintained and should be cosulted for relevant tasks:
+
+- [`ICE_Lab_User_Manual_REV2_2.pdf`] — Server -> Panel communication and general housekeeping
 
 Editable Word source files for the two guides above are kept in
 `Documentation/Source Documentation/` for staff use.
