@@ -164,6 +164,8 @@ started.
 
 `OFFSET = (panel_number − 1) × 100 + 1`
 
+NOTE: The "+1" only seems to be required for MATLAB, I assume this is tied to MATLAB being one of the weird languages that uses 1 as the zero index for arrays, structures, etc..
+
 | Register type     | Address range             | Contents                                                  |
 |-------------------|---------------------------|-----------------------------------------------------------|
 | Discrete Inputs   | `OFFSET+0` … `OFFSET+7`   | Digital inputs `DI0`–`DI7`                                |
