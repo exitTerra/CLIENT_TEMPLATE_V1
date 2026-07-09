@@ -30,7 +30,6 @@ CLIENT_TEMPLATE_2026_V1/
 ├── Client_Template_MODBUS.lvlps       (LabVIEW window-layout info, auto-managed)
 │
 ├── Documentation/                     <- FULL manuals, read these for full detail
-│   ├── ICE_Lab_User_Manual_REV2_2.pdf             Overall rig / lab user manual
 │   ├── ICE-1001 ICE Lab LabVIEW Programming.pdf   Full LabVIEW how-to guide
 │   ├── ICE-1002 ICE Lab MATLAB Programming.pdf    Full MATLAB how-to guide
 │   └── Source Documentation/                      Editable .docx originals (staff use)
@@ -45,14 +44,13 @@ CLIENT_TEMPLATE_2026_V1/
 │   ├── DisconnectFromPannelAddressSpace.vi         Cleanly zeros outputs & frees your panel
 │   ├── TimeKeeping.vi                              Control loop timing
 │   ├── arbitrarySessionLogging.vi                  Session data logging
-│   └── FieldPost.vi                                Field data publishing/logging support
+│   └── FieldPost.vi                                Field data pre-cycle checks
 │
 ├── Labview_Logging/                   <- Log files land here during a logged session
 │                                         (empty until you run one)
 │
 └── MATLAB_INTERFACE/                  <- OPTIONAL advanced-control add-on
     ├── ML_client_template.m           <- OPEN & EDIT THIS for your MATLAB control strategy
-    ├── ML_client_template.asv         (MATLAB autosave backup, safe to ignore/delete)
     └── supportingFunctions/           <- Helper functions, not normally edited
         ├── commsInit.m                Connects to the MODBUS server & claims your panel
         ├── sequencing.m               Non-blocking loop timer
@@ -68,13 +66,13 @@ are listed above simply so you know what each part of the system does.
 ## Architecture — How It All Fits Together
 
 ```
-   ┌────────────────┐        ┌───────────────────────────────────┐
-   │  Physical Rig  │ <----> │  MODBUS/TCP Server @ 192.168.1.200 │
-   │ sensors/actuat.│        └───────────────────┬───────────────┘
-   └────────────────┘                            │
+   ┌────────────────┐         ┌────────────────────────────────────┐
+   │  Physical Rig  │  <----> │  MODBUS/TCP Server @ 192.168.1.200 │
+   │ sensors/actuat.│         └───────────────────┬────────────────┘
+   └────────────────┘                             │
                                                   │
                           ┌───────────────────────▼───────────────────────┐
-                          │  LabVIEW: Client_Template_MOD.vi   (REQUIRED)  │
+                          │  LabVIEW: Client_Template_MOD.vi   (REQUIRED) │
                           └───────────────────────┬───────────────────────┘
                                                   │  same PC, optional,
                                                   │  running at the same time
@@ -95,12 +93,12 @@ are listed above simply so you know what each part of the system does.
 
 ### Signal naming convention
 
-| Code | Name | Direction | Type | Description |
-|---|---|---|---|---|
-| `DI0`–`DI7` | Digital Input | Rig → Program | Boolean (0/1) | Sensor/switch state from the rig |
-| `AI0`–`AI7` | Analogue Input | Rig → Program | Scaled float | Sensor reading from the rig |
-| `MI0`–`MI7` | Move Input | LabVIEW → MATLAB | Scaled float | Value from LabVIEW's front panel (e.g. a setpoint) |
-| `MO0`–`MO7` | Move Output | MATLAB → LabVIEW | Scaled float | Value MATLAB calculated (e.g. a command), returned to LabVIEW |
+| Code        | Name           | Direction        | Type          | Description                                                   |
+|-------------|----------------|------------------|---------------|---------------------------------------------------------------|
+| `DI0`–`DI7` | Digital Input  | Rig → Program    | Boolean (0/1) | Sensor/switch state from the rig                              |
+| `AI0`–`AI7` | Analogue Input | Rig → Program    | Scaled float  | Sensor reading from the rig                                   |
+| `MI0`–`MI7` | Move Input     | LabVIEW → MATLAB | Scaled float  | Value from LabVIEW's front panel (e.g. a setpoint)            |
+| `MO0`–`MO7` | Move Output    | MATLAB → LabVIEW | Scaled float  | Value MATLAB calculated (e.g. a command), returned to LabVIEW |
 
 > **Note:** Values are transmitted as 16-bit MODBUS registers scaled ×100, so
 > all `AI`/`MI`/`MO` values are limited to roughly **±327.67** with 2 decimal
@@ -150,14 +148,16 @@ are listed above simply so you know what each part of the system does.
 > performs no control action — this is intentional, and a good way to
 > confirm your connection works before writing your own control code.
 
-## Troubleshooting
+## Unique MATLAB Template Errors
 
-| Error | Meaning | Fix |
-|---|---|---|
-| **C01** — Panel locked by another user | Someone else (or a previous crashed session of yours) still holds the panel gate | Confirm you used the right ES number, wait for the timeout, or ask your supervisor to reset the panel from the server |
-| **C02** — MODBUS server not found | You are not on the lab network | Check your cable/Wi-Fi connection |
-| **C03** — Kicked from panel | LabVIEW was stopped/crashed, or the session timed out | Reconnect LabVIEW first, then re-run the MATLAB script |
-| `Undefined function 'commsInit'` (or similar) | `supportingFunctions` is not on the MATLAB path | See [MATLAB step 3](#2-matlab-advanced-control-optional) |
+| **C01**   — Panel locked by another user | Someone else (or a previous crashed session of yours) still holds the panel gate 
+        **Potential Fix** Confirm you used the right ES number, wait for the timeout, or ask your supervisor to reset the panel from the server
+| **C02**   — MODBUS server not found
+        **Fix** You are not on the lab network | Check your Wi-Fi connection |
+| **C03**   — Kicked from panel | LabVIEW was stopped/crashed, or the session timed out 
+        **Fix** Reconnect LabVIEW first, then re-run the MATLAB script
+| `Undefined function 'commsInit'` (or similar) - `supportingFunctions` is not on the MATLAB path
+        **Fix** See [MATLAB step 3](#2-matlab-advanced-control-optional) |
 
 ## Appendix: MODBUS Register Map (advanced reference)
 
@@ -167,11 +167,11 @@ started.
 
 `OFFSET = (panel_number − 1) × 100 + 1`
 
-| Register type | Address range | Contents |
-|---|---|---|
-| Discrete Inputs | `OFFSET+0` … `OFFSET+7` | Digital inputs `DI0`–`DI7` |
-| Input Registers | `OFFSET+0` … `OFFSET+7` | Analogue inputs `AI0`–`AI7` (÷100 scaled) |
-| Holding Registers | `OFFSET+8` | Gate/lock register (owning client's ID) |
+| Register type     | Address range             | Contents                                                  |
+|-------------------|---------------------------|-----------------------------------------------------------|
+| Discrete Inputs   | `OFFSET+0` … `OFFSET+7`   | Digital inputs `DI0`–`DI7`                                |
+| Input Registers   | `OFFSET+0` … `OFFSET+7`   | Analogue inputs `AI0`–`AI7` (÷100 scaled)                 |
+| Holding Registers | `OFFSET+8`                | Gate/lock register (owning client's ID)                   |
 | Holding Registers | `OFFSET+14` … `OFFSET+21` | Move Outputs `MO0`–`MO7` (×100 scaled, written by MATLAB) |
 | Holding Registers | `OFFSET+24` … `OFFSET+31` | Move Inputs `MI0`–`MI7` (×100 scaled, written by LabVIEW) |
 
@@ -204,4 +204,4 @@ authored content, worth keeping in mind when archiving or branching:
   template, safe to exclude.
 
 ---
-*Guide last generated: July 2026.*
+*Created: July 2026.*
